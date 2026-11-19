@@ -4,7 +4,26 @@ A tuition and mentorship platform connecting students with tutors offering onlin
 
 ## Project status
 
-Planning and repository setup. Application features and deployment are not implemented yet.
+Milestone 1: runnable Next.js client foundation with the Warm Academic design, responsive homepage introduction, subject categories, and how-it-works section. This is not the finished assignment: authentication, live tuition listings, dashboards, images, and payments remain to be implemented. Follow [the requirements checklist](docs/requirements.md).
+
+## Run locally
+
+Use Node.js 22+ and pnpm 11.25.0. From this directory:
+
+```sh
+pnpm install
+pnpm dev
+```
+
+Open `http://localhost:3000`. Copy `.env.example` to `.env.local` when connecting the backend. The Express server is in `../A09-server` and starts separately on port 5000.
+
+```sh
+pnpm typecheck
+pnpm build
+pnpm start
+```
+
+Development and production builds use Next.js's Webpack option because Turbopack's CSS worker failed to start in this Windows environment.
 
 ## Planned technology
 
@@ -27,7 +46,7 @@ See [the implementation checklist](docs/requirements.md) for the full delivery s
 
 ## Repository and delivery plan
 
-The assignment requires separate client and server repository links, with at least 20 meaningful client commits and 12 meaningful server commits. This repository is the starting point; application placement and the second repository must be established before implementation. Commit completed, reviewable changes as the project progresses; do not create empty commits to satisfy the count.
+The assignment requires separate client and server repository links, with at least 20 meaningful client commits and 12 meaningful server commits. This repository (`A09`) contains the client; the sibling `A09-server` contains the server and has its own Git repository. The user makes all commits. See [the milestone plan](docs/commit-plan.md); commit completed, reviewable changes rather than empty commits.
 
 ## Configuration
 
@@ -36,11 +55,11 @@ Keep real credentials in ignored environment files. The client uses `.env.local`
 ## Submission details
 
 - Live site: pending deployment.
-- Client repository: pending application placement.
+- Client repository: https://github.com/MH-git-ui/A09
 - Server repository: pending creation.
 - Admin test credentials: pending dedicated demo account setup.
 - Tutor test credentials: pending dedicated demo account setup.
-- Installed npm packages: none yet; document actual dependencies when added.
+- Installed packages: Next.js, React, React DOM, Lucide React, TypeScript, Tailwind CSS, the Tailwind PostCSS plugin, DaisyUI, and Node/React type definitions. Exact versions are locked in `pnpm-lock.yaml`.
 
 ## Requirements source
 
