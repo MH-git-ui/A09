@@ -1,0 +1,9 @@
+'use client';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { useData } from '@/hooks/use-data';
+import { api, json } from '@/lib/api';
+import { User } from '@/lib/types';
+import { Loading, ErrorState, Badge } from './feedback';
+import { useAuth } from './auth-provider';
+export function AdminUsers() { const { user } = useAuth(); const { data, loading, error, reload } = useData<User[]>('/admin/users', true); const [busy, setBusy] = useState(''); const [search, setSearch] = useState(''); async function change(u: User, role: string) { if (!confirm(`Change ${u.name} from ${u.role} to ${role}? Removing the tutor role will close their listings.`)) return; setBusy(u.id); try { await api(`/admin/users/${u.id}`, json('PATCH', { role })); toast.success('User role updated.'); reload(); } catch (err) { toast.error((err as Error).message); } finally { setBusy(''); } } return <><div className="page-heading"><p className="eyebrow">YOUR COMMUNITY</p><h1>User Management</h1><p>Manage access with care. Your own administrator role is protected.</p></div><label className="compact-filter">Find a member<input value={search} onChange={e => setSearch(e.target.value)} placeholder="Name or email" /></label>{loading ? <Loading /> : error ? <ErrorState message={error} retry={reload} /> : <div className="table-wrap"><table><thead><tr><th>Member</th><th>Email</th><th>Plan</th><th>Role</th></tr></thead><tbody>{data?.filter(u => `${u.name} ${u.email}`.toLowerCase().includes(search.toLowerCase())).map(u => <tr key={u.id}><td>{u.name}</td><td>{u.email}</td><td><Badge value={u.plan} /></td><td><select aria-label={`Role for ${u.name}`} value={u.role} disabled={busy === u.id || user?.id === u.id} onChange={e => void change(u, e.target.value)}><option value="student">Student</option><option value="tutor">Tutor</option><option value="admin">Admin</option></select></td></tr>)}</tbody></table></div>}</>; }
