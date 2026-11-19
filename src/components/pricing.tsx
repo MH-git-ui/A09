@@ -1,8 +1,158 @@
-'use client';
-import Link from 'next/link';
-import { useState } from 'react';
-import { Check, Sparkles } from 'lucide-react';
-import { toast } from 'sonner';
-import { useAuth } from './auth-provider';
-import { api, json } from '@/lib/api';
-export function Pricing({ compact = false }: { compact?: boolean }) { const { user } = useAuth(); const [role, setRole] = useState<'student' | 'tutor'>(user?.role === 'tutor' ? 'tutor' : 'student'); const [busy, setBusy] = useState(false); async function checkout() { setBusy(true); try { const result = await api<{ url: string }>('/payments/checkout', json('POST', {})); const url = new URL(result.url); if (url.hostname !== 'checkout.stripe.com') throw new Error('Unexpected checkout destination.'); window.location.assign(result.url); } catch (err) { toast.error((err as Error).message); setBusy(false); } } const tutor = role === 'tutor'; const current = user?.plan === 'pro'; return <section className={`container pricing-section ${compact ? 'section' : ''}`}><div className="center-heading"><p className="eyebrow">ROOM TO GROW</p><h2>{compact ? 'Start free. Go further with Pro.' : 'A little more possibility.'}</h2><p>Choose what fits your next chapter. No recurring charge.</p></div><div className="plan-switch" role="group" aria-label="Choose plan audience"><button aria-pressed={!tutor} onClick={() => setRole('student')}>For Students</button><button aria-pressed={tutor} onClick={() => setRole('tutor')}>For Tutors</button></div><div className="pricing-grid"><article className="plan-card"><p className="eyebrow">A GREAT PLACE TO BEGIN</p><h3>Free</h3><p className="plan-price">$0<span> / always</span></p><p>Everything you need to get started.</p><ul>{(tutor ? ['Up to 2 tuition posts', 'Manage student applications', 'Your own teaching dashboard'] : ['Browse approved tuition listings', 'Apply to your preferred tutors', 'Track every application']).map(s => <li key={s}><Check size={18} />{s}</li>)}</ul><Link className="btn btn-outline full-width" href={user ? `/dashboard/${user.role}` : '/sign-up'}>{user ? 'Open Dashboard' : 'Start for Free'}</Link></article><article className="plan-card pro-plan"><span className="pro-label"><Sparkles size={15} />MAKE MORE POSSIBLE</span><p className="eyebrow">FOR YOUR NEXT BIG STEP</p><h3>Pro {tutor ? 'Tutor' : 'Student'}</h3><p className="plan-price">${tutor ? '15' : '10'}<span> / one-time upgrade</span></p><p>More room for the goals that matter.</p><ul>{(tutor ? ['Unlimited tuition posts', 'Pro tutor badge on your profile', 'All Free features included'] : ['Priority placement in applicant lists', 'Pro status on your applications', 'All Free features included']).map(s => <li key={s}><Check size={18} />{s}</li>)}</ul>{!user ? <Link className="btn btn-primary full-width" href="/sign-in?next=/pricing">Sign in to Subscribe</Link> : user.role === 'admin' ? <p className="notice">Admin accounts manage the platform without a Pro plan.</p> : user.role !== role ? <p className="notice">Select the {user.role} plan to upgrade your account.</p> : <button className="btn btn-primary full-width" disabled={busy || current} onClick={() => void checkout()}>{current ? 'You’re already Pro' : busy ? 'Opening Stripe…' : 'Subscribe with Stripe'}</button>}</article></div><p className="pricing-footnote">Tuition fees are separate from Pro upgrades. Pro gives priority review, not guaranteed acceptance. Payments are processed by Stripe.</p></section>; }
+"use client";
+import Link from "next/link";
+import { useState } from "react";
+import { Check, Sparkles } from "lucide-react";
+import { toast } from "sonner";
+import { useAuth } from "./auth-provider";
+import { api, json } from "@/lib/api";
+export function Pricing({ compact = false }: { compact?: boolean }) {
+  const { user } = useAuth();
+  const [role, setRole] = useState<"student" | "tutor">(
+    user?.role === "tutor" ? "tutor" : "student",
+  );
+  const [busy, setBusy] = useState(false);
+  async function checkout() {
+    setBusy(true);
+    try {
+      const result = await api<{ url: string }>(
+        "/payments/checkout",
+        json("POST", {}),
+      );
+      const url = new URL(result.url);
+      if (url.hostname !== "checkout.stripe.com")
+        throw new Error("Unexpected checkout destination.");
+      window.location.assign(result.url);
+    } catch (err) {
+      toast.error((err as Error).message);
+      setBusy(false);
+    }
+  }
+  const tutor = role === "tutor";
+  const current = user?.plan === "pro";
+  return (
+    <section
+      className={`container pricing-section ${compact ? "section" : ""}`}
+    >
+      <div className="center-heading">
+        <p className="eyebrow">ROOM TO GROW</p>
+        <h2>
+          {compact
+            ? "Start free. Go further with Pro."
+            : "A little more possibility."}
+        </h2>
+        <p>Choose what fits your next chapter. No recurring charge.</p>
+      </div>
+      <div
+        className="plan-switch"
+        role="group"
+        aria-label="Choose plan audience"
+      >
+        <button aria-pressed={!tutor} onClick={() => setRole("student")}>
+          For Students
+        </button>
+        <button aria-pressed={tutor} onClick={() => setRole("tutor")}>
+          For Tutors
+        </button>
+      </div>
+      <div className="pricing-grid">
+        <article className="plan-card">
+          <p className="eyebrow">A GREAT PLACE TO BEGIN</p>
+          <h3>Free</h3>
+          <p className="plan-price">
+            $0<span> / always</span>
+          </p>
+          <p>Everything you need to get started.</p>
+          <ul>
+            {(tutor
+              ? [
+                  "Up to 2 tuition posts",
+                  "Manage student applications",
+                  "Your own teaching dashboard",
+                ]
+              : [
+                  "Browse approved tuition listings",
+                  "Apply to your preferred tutors",
+                  "Track every application",
+                ]
+            ).map((s) => (
+              <li key={s}>
+                <Check size={18} />
+                {s}
+              </li>
+            ))}
+          </ul>
+          <Link
+            className="btn btn-outline full-width"
+            href={user ? `/dashboard/${user.role}` : "/sign-up"}
+          >
+            {user ? "Open Dashboard" : "Start for Free"}
+          </Link>
+        </article>
+        <article className="plan-card pro-plan">
+          <span className="pro-label">
+            <Sparkles size={15} />
+            MAKE MORE POSSIBLE
+          </span>
+          <p className="eyebrow">FOR YOUR NEXT BIG STEP</p>
+          <h3>Pro {tutor ? "Tutor" : "Student"}</h3>
+          <p className="plan-price">
+            ${tutor ? "15" : "10"}
+            <span> / one-time upgrade</span>
+          </p>
+          <p>More room for the goals that matter.</p>
+          <ul>
+            {(tutor
+              ? [
+                  "Unlimited tuition posts",
+                  "Pro tutor badge on your profile",
+                  "All Free features included",
+                ]
+              : [
+                  "Priority placement in applicant lists",
+                  "Pro status on your applications",
+                  "All Free features included",
+                ]
+            ).map((s) => (
+              <li key={s}>
+                <Check size={18} />
+                {s}
+              </li>
+            ))}
+          </ul>
+          {!user ? (
+            <Link
+              className="btn btn-primary full-width"
+              href="/sign-in?next=/pricing"
+            >
+              Sign in to Subscribe
+            </Link>
+          ) : user.role === "admin" ? (
+            <p className="notice">
+              Admin accounts manage the platform without a Pro plan.
+            </p>
+          ) : user.role !== role ? (
+            <p className="notice">
+              Select the {user.role} plan to upgrade your account.
+            </p>
+          ) : (
+            <button
+              className="btn btn-primary full-width"
+              disabled={busy || current}
+              onClick={() => void checkout()}
+            >
+              {current
+                ? "You’re already Pro"
+                : busy
+                  ? "Opening Stripe…"
+                  : "Subscribe with Stripe"}
+            </button>
+          )}
+        </article>
+      </div>
+      <p className="pricing-footnote">
+        Tuition fees are separate from Pro upgrades. Pro gives priority review,
+        not guaranteed acceptance. Payments are processed by Stripe.
+      </p>
+    </section>
+  );
+}

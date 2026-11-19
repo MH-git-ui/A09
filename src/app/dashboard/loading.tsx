@@ -1,2 +1,4 @@
-import { Loading } from '@/components/feedback';
-export default function Page() { return <Loading count={4} />; }
+import { Loading } from "@/components/feedback";
+export default function Page() {
+  return <Loading count={4} />;
+}

@@ -1,15 +1,163 @@
-'use client';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import { SlidersHorizontal, Search } from 'lucide-react';
-import { subjects, levels, TuitionPage } from '@/lib/types';
-import { useData } from '@/hooks/use-data';
-import { TuitionCard } from './tuition-card';
-import { Loading, Empty, ErrorState } from './feedback';
+"use client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { SlidersHorizontal, Search } from "lucide-react";
+import { subjects, levels, TuitionPage } from "@/lib/types";
+import { useData } from "@/hooks/use-data";
+import { TuitionCard } from "./tuition-card";
+import { Loading, Empty, ErrorState } from "./feedback";
 export function Browse() {
-  const params = useSearchParams(); const router = useRouter(); const [filtersOpen, setFiltersOpen] = useState(false);
-  const query = params.toString(); const { data, error, loading, reload } = useData<TuitionPage>(`/tuitions?${query}`);
-  function submit(event: React.FormEvent<HTMLFormElement>) { event.preventDefault(); const form = new FormData(event.currentTarget); const next = new URLSearchParams(); for (const [key, value] of form) if (String(value).trim()) next.set(key, String(value).trim()); router.push(`/tuitions?${next}`); setFiltersOpen(false); }
-  function page(number: number) { const next = new URLSearchParams(params); next.set('page', String(number)); router.push(`/tuitions?${next}`); }
-  return <div className="container browse-page"><div className="page-heading"><p className="eyebrow">FIND YOUR NEXT POSSIBILITY</p><h1>Good guidance. <em>Your way.</em></h1><p>Explore a subject, find your fit, and take the next step.</p></div><button className="btn btn-outline filter-toggle" aria-expanded={filtersOpen} onClick={() => setFiltersOpen(!filtersOpen)}><SlidersHorizontal size={18} />Filters</button><div className="browse-layout"><aside className={`filter-panel ${filtersOpen ? 'filter-open' : ''}`}><form key={query} onSubmit={submit}><h2>Find your fit</h2><label>Search by subject or title<div className="search-field"><Search size={17} /><input name="search" defaultValue={params.get('search') ?? ''} placeholder="What would you like to learn?" maxLength={100} /></div></label>{[['subject', 'Subject', subjects], ['classLevel', 'Class level', levels], ['mode', 'Learning mode', ['Online', 'Offline']]].map(([key, label, values]) => <label key={String(key)}>{label as string}<select name={key as string} defaultValue={params.get(key as string) ?? ''}><option value="">All {String(label).toLowerCase()}s</option>{(values as string[]).map(value => <option key={value}>{value}</option>)}</select></label>)}<button className="btn btn-primary full-width">Apply filters</button><button type="button" className="text-link" onClick={() => { router.push('/tuitions'); setFiltersOpen(false); }}>Reset filters</button></form><p className="filter-note">A stronger foundation starts with the right connection.</p></aside><div className="browse-results"><div className="results-heading"><span>{loading ? 'Finding your next opportunity…' : `${data?.total ?? 0} tuitions to explore`}</span><span>Newest first</span></div>{loading ? <Loading count={6} /> : error ? <ErrorState message={error} retry={reload} /> : data?.items.length ? <><div className="tuition-grid">{data.items.map(t => <TuitionCard tuition={t} key={t._id} />)}</div><nav className="pagination" aria-label="Tuition pages"><button className="btn btn-outline" disabled={data.page <= 1} onClick={() => page(data.page - 1)}>Previous</button>{Array.from({ length: data.pages }, (_, i) => i + 1).filter(n => n === 1 || n === data.pages || Math.abs(n - data.page) <= 1).map(n => <button key={n} aria-current={n === data.page ? 'page' : undefined} className={`btn ${n === data.page ? 'btn-primary' : 'btn-outline'}`} onClick={() => page(n)}>{n}</button>)}<button className="btn btn-outline" disabled={data.page >= data.pages} onClick={() => page(data.page + 1)}>Next</button></nav></> : <Empty title="No tuitions match just yet">Try another subject or reset the filters.</Empty>}</div></div></div>;
+  const params = useSearchParams();
+  const router = useRouter();
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const query = params.toString();
+  const { data, error, loading, reload } = useData<TuitionPage>(
+    `/tuitions?${query}`,
+  );
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const next = new URLSearchParams();
+    for (const [key, value] of form)
+      if (String(value).trim()) next.set(key, String(value).trim());
+    router.push(`/tuitions?${next}`);
+    setFiltersOpen(false);
+  }
+  function page(number: number) {
+    const next = new URLSearchParams(params);
+    next.set("page", String(number));
+    router.push(`/tuitions?${next}`);
+  }
+  return (
+    <div className="container browse-page">
+      <div className="page-heading">
+        <p className="eyebrow">FIND YOUR NEXT POSSIBILITY</p>
+        <h1>
+          Good guidance. <em>Your way.</em>
+        </h1>
+        <p>Explore a subject, find your fit, and take the next step.</p>
+      </div>
+      <button
+        className="btn btn-outline filter-toggle"
+        aria-expanded={filtersOpen}
+        onClick={() => setFiltersOpen(!filtersOpen)}
+      >
+        <SlidersHorizontal size={18} />
+        Filters
+      </button>
+      <div className="browse-layout">
+        <aside className={`filter-panel ${filtersOpen ? "filter-open" : ""}`}>
+          <form key={query} onSubmit={submit}>
+            <h2>Find your fit</h2>
+            <label>
+              Search by subject or title
+              <div className="search-field">
+                <Search size={17} />
+                <input
+                  name="search"
+                  defaultValue={params.get("search") ?? ""}
+                  placeholder="What would you like to learn?"
+                  maxLength={100}
+                />
+              </div>
+            </label>
+            {[
+              ["subject", "Subject", subjects],
+              ["classLevel", "Class level", levels],
+              ["mode", "Learning mode", ["Online", "Offline"]],
+            ].map(([key, label, values]) => (
+              <label key={String(key)}>
+                {label as string}
+                <select
+                  name={key as string}
+                  defaultValue={params.get(key as string) ?? ""}
+                >
+                  <option value="">All {String(label).toLowerCase()}s</option>
+                  {(values as string[]).map((value) => (
+                    <option key={value}>{value}</option>
+                  ))}
+                </select>
+              </label>
+            ))}
+            <button className="btn btn-primary full-width">
+              Apply filters
+            </button>
+            <button
+              type="button"
+              className="text-link"
+              onClick={() => {
+                router.push("/tuitions");
+                setFiltersOpen(false);
+              }}
+            >
+              Reset filters
+            </button>
+          </form>
+          <p className="filter-note">
+            A stronger foundation starts with the right connection.
+          </p>
+        </aside>
+        <div className="browse-results">
+          <div className="results-heading">
+            <span>
+              {loading
+                ? "Finding your next opportunity…"
+                : `${data?.total ?? 0} tuitions to explore`}
+            </span>
+            <span>Newest first</span>
+          </div>
+          {loading ? (
+            <Loading count={6} />
+          ) : error ? (
+            <ErrorState message={error} retry={reload} />
+          ) : data?.items.length ? (
+            <>
+              <div className="tuition-grid">
+                {data.items.map((t) => (
+                  <TuitionCard tuition={t} key={t._id} />
+                ))}
+              </div>
+              <nav className="pagination" aria-label="Tuition pages">
+                <button
+                  className="btn btn-outline"
+                  disabled={data.page <= 1}
+                  onClick={() => page(data.page - 1)}
+                >
+                  Previous
+                </button>
+                {Array.from({ length: data.pages }, (_, i) => i + 1)
+                  .filter(
+                    (n) =>
+                      n === 1 ||
+                      n === data.pages ||
+                      Math.abs(n - data.page) <= 1,
+                  )
+                  .map((n) => (
+                    <button
+                      key={n}
+                      aria-current={n === data.page ? "page" : undefined}
+                      className={`btn ${n === data.page ? "btn-primary" : "btn-outline"}`}
+                      onClick={() => page(n)}
+                    >
+                      {n}
+                    </button>
+                  ))}
+                <button
+                  className="btn btn-outline"
+                  disabled={data.page >= data.pages}
+                  onClick={() => page(data.page + 1)}
+                >
+                  Next
+                </button>
+              </nav>
+            </>
+          ) : (
+            <Empty title="No tuitions match just yet">
+              Try another subject or reset the filters.
+            </Empty>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }

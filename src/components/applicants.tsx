@@ -1,8 +1,96 @@
-'use client';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import { useData } from '@/hooks/use-data';
-import { api, json } from '@/lib/api';
-import { Application } from '@/lib/types';
-import { Loading, ErrorState, Empty, Badge } from './feedback';
-export function Applicants() { const { data, loading, error, reload } = useData<Application[]>('/dashboard/applicants', true, true); const [busy, setBusy] = useState(''); async function decide(id: string, status: string) { setBusy(id); try { await api(`/dashboard/applicants/${id}`, json('PATCH', { status })); toast.success(`Application ${status}.`); reload(); } catch (err) { toast.error((err as Error).message); } finally { setBusy(''); } } return <><div className="page-heading"><p className="eyebrow">MAKE THE CONNECTION</p><h1>Manage Applicants</h1><p>Pro students appear first for priority review. You decide who joins.</p></div>{loading ? <Loading /> : error ? <ErrorState message={error} retry={reload} /> : data?.length ? <div className="applicant-grid">{data.map(a => <article className="panel" key={a._id}><div className="heading-with-action"><h2>{a.studentName}</h2><Badge value={a.status} /></div>{a.priority && <Badge value="Pro priority" />}<p className="muted">{a.tuitionTitle}</p><dl className="info-list"><div><dt>Email</dt><dd>{a.studentEmail}</dd></div><div><dt>Phone</dt><dd>{a.studentPhone}</dd></div><div><dt>Preferred schedule</dt><dd>{a.preferredSchedule}</dd></div><div><dt>Learning note</dt><dd>{a.studentNote || 'No note provided.'}</dd></div></dl>{a.status === 'pending' && <div className="actions"><button className="btn btn-primary" disabled={busy === a._id} onClick={() => void decide(a._id, 'accepted')}>Accept</button><button className="btn btn-danger" disabled={busy === a._id} onClick={() => void decide(a._id, 'rejected')}>Reject</button></div>}</article>)}</div> : <Empty title="No applications yet">Student applications will appear here when they find your tuitions.</Empty>}</>; }
+"use client";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useData } from "@/hooks/use-data";
+import { api, json } from "@/lib/api";
+import { Application } from "@/lib/types";
+import { Loading, ErrorState, Empty, Badge } from "./feedback";
+export function Applicants() {
+  const { data, loading, error, reload } = useData<Application[]>(
+    "/dashboard/applicants",
+    true,
+    true,
+  );
+  const [busy, setBusy] = useState("");
+  async function decide(id: string, status: string) {
+    setBusy(id);
+    try {
+      await api(`/dashboard/applicants/${id}`, json("PATCH", { status }));
+      toast.success(`Application ${status}.`);
+      reload();
+    } catch (err) {
+      toast.error((err as Error).message);
+    } finally {
+      setBusy("");
+    }
+  }
+  return (
+    <>
+      <div className="page-heading">
+        <p className="eyebrow">MAKE THE CONNECTION</p>
+        <h1>Manage Applicants</h1>
+        <p>
+          Pro students appear first for priority review. You decide who joins.
+        </p>
+      </div>
+      {loading ? (
+        <Loading />
+      ) : error ? (
+        <ErrorState message={error} retry={reload} />
+      ) : data?.length ? (
+        <div className="applicant-grid">
+          {data.map((a) => (
+            <article className="panel" key={a._id}>
+              <div className="heading-with-action">
+                <h2>{a.studentName}</h2>
+                <Badge value={a.status} />
+              </div>
+              {a.priority && <Badge value="Pro priority" />}
+              <p className="muted">{a.tuitionTitle}</p>
+              <dl className="info-list">
+                <div>
+                  <dt>Email</dt>
+                  <dd>{a.studentEmail}</dd>
+                </div>
+                <div>
+                  <dt>Phone</dt>
+                  <dd>{a.studentPhone}</dd>
+                </div>
+                <div>
+                  <dt>Preferred schedule</dt>
+                  <dd>{a.preferredSchedule}</dd>
+                </div>
+                <div>
+                  <dt>Learning note</dt>
+                  <dd>{a.studentNote || "No note provided."}</dd>
+                </div>
+              </dl>
+              {a.status === "pending" && (
+                <div className="actions">
+                  <button
+                    className="btn btn-primary"
+                    disabled={busy === a._id}
+                    onClick={() => void decide(a._id, "accepted")}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    disabled={busy === a._id}
+                    onClick={() => void decide(a._id, "rejected")}
+                  >
+                    Reject
+                  </button>
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      ) : (
+        <Empty title="No applications yet">
+          Student applications will appear here when they find your tuitions.
+        </Empty>
+      )}
+    </>
+  );
+}

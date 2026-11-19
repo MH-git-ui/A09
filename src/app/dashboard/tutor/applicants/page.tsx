@@ -1,2 +1,4 @@
-import { Applicants } from '@/components/applicants';
-export default function Page() { return <Applicants />; }
+import { Applicants } from "@/components/applicants";
+export default function Page() {
+  return <Applicants />;
+}

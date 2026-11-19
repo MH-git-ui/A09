@@ -1,5 +1,64 @@
-'use client';
-import { useData } from '@/hooks/use-data';
-import { Payment, date } from '@/lib/types';
-import { Loading, ErrorState, Empty, Badge } from './feedback';
-export function Transactions() { const { data, loading, error, reload } = useData<Payment[]>('/admin/transactions', true, true); return <><div className="page-heading"><p className="eyebrow">TRANSPARENT BY DESIGN</p><h1>Transactions</h1><p>Verified Stripe Pro upgrades, all in one place.</p></div>{loading ? <Loading /> : error ? <ErrorState message={error} retry={reload} /> : data?.length ? <div className="table-wrap"><table><thead><tr><th>Member</th><th>Role</th><th>Plan</th><th>Amount</th><th>Transaction ID</th><th>Paid</th></tr></thead><tbody>{data.map(p => <tr key={p._id}><td>{p.userName}<small>{p.userEmail}</small></td><td><Badge value={p.userRole} /></td><td>{p.planName}</td><td>${p.amount.toFixed(2)} {p.currency.toUpperCase()}</td><td className="transaction-id">{p.transactionId}</td><td>{date(p.paidAt)}</td></tr>)}</tbody></table></div> : <Empty title="No payments yet">Verified Pro payments will appear here. No sample transactions are counted as real revenue.</Empty>}</>; }
+"use client";
+import { useData } from "@/hooks/use-data";
+import { Payment, date } from "@/lib/types";
+import { Loading, ErrorState, Empty, Badge } from "./feedback";
+export function Transactions() {
+  const { data, loading, error, reload } = useData<Payment[]>(
+    "/admin/transactions",
+    true,
+    true,
+  );
+  return (
+    <>
+      <div className="page-heading">
+        <p className="eyebrow">TRANSPARENT BY DESIGN</p>
+        <h1>Transactions</h1>
+        <p>Verified Stripe Pro upgrades, all in one place.</p>
+      </div>
+      {loading ? (
+        <Loading />
+      ) : error ? (
+        <ErrorState message={error} retry={reload} />
+      ) : data?.length ? (
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Role</th>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Transaction ID</th>
+                <th>Paid</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((p) => (
+                <tr key={p._id}>
+                  <td>
+                    {p.userName}
+                    <small>{p.userEmail}</small>
+                  </td>
+                  <td>
+                    <Badge value={p.userRole} />
+                  </td>
+                  <td>{p.planName}</td>
+                  <td>
+                    ${p.amount.toFixed(2)} {p.currency.toUpperCase()}
+                  </td>
+                  <td className="transaction-id">{p.transactionId}</td>
+                  <td>{date(p.paidAt)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <Empty title="No payments yet">
+          Verified Pro payments will appear here. No sample transactions are
+          counted as real revenue.
+        </Empty>
+      )}
+    </>
+  );
+}

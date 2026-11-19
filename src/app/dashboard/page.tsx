@@ -1,2 +1,4 @@
-import { DashboardRedirect } from '@/components/dashboard-shell';
-export default function Page() { return <DashboardRedirect />; }
+import { DashboardRedirect } from "@/components/dashboard-shell";
+export default function Page() {
+  return <DashboardRedirect />;
+}

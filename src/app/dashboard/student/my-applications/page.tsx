@@ -1,2 +1,4 @@
-import { MyApplications } from '@/components/my-applications';
-export default function Page() { return <MyApplications />; }
+import { MyApplications } from "@/components/my-applications";
+export default function Page() {
+  return <MyApplications />;
+}

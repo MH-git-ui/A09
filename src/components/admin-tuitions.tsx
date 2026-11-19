@@ -1,8 +1,103 @@
-'use client';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import { useData } from '@/hooks/use-data';
-import { api, json } from '@/lib/api';
-import { Tuition, money } from '@/lib/types';
-import { Loading, ErrorState, Empty, Badge } from './feedback';
-export function AdminTuitions() { const { data, loading, error, reload } = useData<Tuition[]>('/admin/tuitions', true, true); const [busy, setBusy] = useState(''); const [filter, setFilter] = useState('all'); async function moderate(id: string, approvalStatus: string) { setBusy(id); try { await api(`/admin/tuitions/${id}`, json('PATCH', { approvalStatus })); toast.success(`Tuition ${approvalStatus}.`); reload(); } catch (err) { toast.error((err as Error).message); } finally { setBusy(''); } } const items = data?.filter(t => filter === 'all' || t.approvalStatus === filter); return <><div className="page-heading"><p className="eyebrow">A COMMUNITY WORTH LEARNING IN</p><h1>Tuition Approvals</h1><p>Review content before it reaches students.</p></div><label className="compact-filter">Review status<select value={filter} onChange={e => setFilter(e.target.value)}>{['all', 'pending', 'approved', 'rejected'].map(s => <option key={s}>{s}</option>)}</select></label>{loading ? <Loading /> : error ? <ErrorState message={error} retry={reload} /> : items?.length ? <div className="applicant-grid">{items.map(t => <article className="panel" key={t._id}><div className="heading-with-action"><h2>{t.title}</h2><Badge value={t.approvalStatus} /></div><p>{t.tutorName} · {t.tutorEmail}</p><p className="muted">{t.subject} · {t.classLevel} · {t.mode} · {money(t.monthlyFee)}/month</p><details><summary>Review full listing</summary><img className="review-image" src={t.bannerImage} alt={t.title} /><p>{t.description}</p><p>{t.location} · {t.schedule} · {t.daysPerWeek} days/week</p></details><div className="actions"><button className="btn btn-primary" disabled={busy === t._id || t.approvalStatus === 'approved'} onClick={() => void moderate(t._id, 'approved')}>Approve</button><button className="btn btn-danger" disabled={busy === t._id || t.approvalStatus === 'rejected'} onClick={() => void moderate(t._id, 'rejected')}>Reject</button></div></article>)}</div> : <Empty title="No listings in this view">Change the review filter to see other tuitions.</Empty>}</>; }
+"use client";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useData } from "@/hooks/use-data";
+import { api, json } from "@/lib/api";
+import { Tuition, money } from "@/lib/types";
+import { Loading, ErrorState, Empty, Badge } from "./feedback";
+export function AdminTuitions() {
+  const { data, loading, error, reload } = useData<Tuition[]>(
+    "/admin/tuitions",
+    true,
+    true,
+  );
+  const [busy, setBusy] = useState("");
+  const [filter, setFilter] = useState("all");
+  async function moderate(id: string, approvalStatus: string) {
+    setBusy(id);
+    try {
+      await api(`/admin/tuitions/${id}`, json("PATCH", { approvalStatus }));
+      toast.success(`Tuition ${approvalStatus}.`);
+      reload();
+    } catch (err) {
+      toast.error((err as Error).message);
+    } finally {
+      setBusy("");
+    }
+  }
+  const items = data?.filter(
+    (t) => filter === "all" || t.approvalStatus === filter,
+  );
+  return (
+    <>
+      <div className="page-heading">
+        <p className="eyebrow">A COMMUNITY WORTH LEARNING IN</p>
+        <h1>Tuition Approvals</h1>
+        <p>Review content before it reaches students.</p>
+      </div>
+      <label className="compact-filter">
+        Review status
+        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+          {["all", "pending", "approved", "rejected"].map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </select>
+      </label>
+      {loading ? (
+        <Loading />
+      ) : error ? (
+        <ErrorState message={error} retry={reload} />
+      ) : items?.length ? (
+        <div className="applicant-grid">
+          {items.map((t) => (
+            <article className="panel" key={t._id}>
+              <div className="heading-with-action">
+                <h2>{t.title}</h2>
+                <Badge value={t.approvalStatus} />
+              </div>
+              <p>
+                {t.tutorName} · {t.tutorEmail}
+              </p>
+              <p className="muted">
+                {t.subject} · {t.classLevel} · {t.mode} · {money(t.monthlyFee)}
+                /month
+              </p>
+              <details>
+                <summary>Review full listing</summary>
+                <img
+                  className="review-image"
+                  src={t.bannerImage}
+                  alt={t.title}
+                />
+                <p>{t.description}</p>
+                <p>
+                  {t.location} · {t.schedule} · {t.daysPerWeek} days/week
+                </p>
+              </details>
+              <div className="actions">
+                <button
+                  className="btn btn-primary"
+                  disabled={busy === t._id || t.approvalStatus === "approved"}
+                  onClick={() => void moderate(t._id, "approved")}
+                >
+                  Approve
+                </button>
+                <button
+                  className="btn btn-danger"
+                  disabled={busy === t._id || t.approvalStatus === "rejected"}
+                  onClick={() => void moderate(t._id, "rejected")}
+                >
+                  Reject
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <Empty title="No listings in this view">
+          Change the review filter to see other tuitions.
+        </Empty>
+      )}
+    </>
+  );
+}
