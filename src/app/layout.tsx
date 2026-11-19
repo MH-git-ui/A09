@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AuthProvider } from '@/components/auth-provider';
 
 export const metadata: Metadata = {
   title: { default: "MentorLagbe | A little guidance. A world of possibility.", template: "%s | MentorLagbe" },
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body><a className="skip-link" href="#main-content">Skip to content</a>{children}</body></html>;
+  return <html lang="en"><body><a className="skip-link" href="#main-content">Skip to content</a><AuthProvider>{children}</AuthProvider></body></html>;
 }
