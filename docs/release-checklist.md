@@ -2,6 +2,8 @@
 
 ## Implemented and locally verified
 
+Verification on November 20, 2026: the production build completed all 22 routes with TypeScript checks, and all 18 backend tests passed. These local checks do not verify hosted services.
+
 - [x] Separate repositories and more than 20 client / 12 server commits.
 - [x] Next.js production build and TypeScript check.
 - [x] Eighteen backend tests including role/ownership restrictions, duplicate application handling, atomic free limits, and payment idempotency.
