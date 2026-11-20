@@ -29,9 +29,9 @@ The local runner generates a password in the server's ignored `.local/config.jso
 
 ## Verification and remaining release work
 
-All pages passed a production build and all 23 server tests pass. On the deployed frontend, API checks verified admin, tutor and student signin, secure cookies, session-bound tokens, dashboard access, role restrictions and logout. Browser checks verified the homepage and subject filtering at a 375px viewport without horizontal document overflow. Full dashboard visual checks and live payment/upload verification remain pending.
+All pages passed a production build and all 23 server tests pass. On the deployed frontend, API checks verified admin, tutor and student signin, secure cookies, session-bound tokens, dashboard access, role restrictions and logout. Browser checks verified the homepage and subject filtering at a 375px viewport without horizontal document overflow. Full dashboard visual checks remain pending; see the integration verification below.
 
-Vercel hosting and cloud MongoDB are configured and verified. The project is NOT ready for final submission until Stripe test keys/webhook and ImgBB credentials are configured and verified, and the outstanding requirements below are resolved. The footer currently identifies its contact as a demonstration address; replace it with the project contact before submission.
+Vercel hosting and cloud MongoDB are configured and verified. The project is NOT ready for final submission until the outstanding requirements below are resolved. The footer currently identifies its contact as a demonstration address; replace it with the project contact before submission.
 
 The application database has four business collections. BetterAuth account/session/verification storage uses a separate companion database. This must be clarified with the instructor if 'exactly four collections' applies across every database. Pro is implemented as a one-time $15 tutor / $10 student upgrade because the assignment does not specify a billing interval.
 
@@ -43,3 +43,9 @@ The application database has four business collections. BetterAuth account/sessi
 - Live API: https://mentorlagbe-api-mh.vercel.app
 
 See docs/release-checklist.md for configuration and remaining acceptance checks. Commits are authorized by the user and represent separate implementation milestones; the required minimums are 20 client and 12 server commits.
+
+## Integration verification — November 21, 2026
+
+Stripe test credentials, signed webhooks and ImgBB are configured in Vercel. Authenticated ImgBB upload and hosted image retrieval passed. A $10 USD sandbox checkout completed, the success page confirmed payment, and the demo student dashboard showed Pro after reload. Automatic and manually resent Stripe webhooks both returned HTTP 200; repeated verification and delivery retained exactly one MongoDB payment record. No real money was charged. Adaptive Pricing is disabled to preserve the fixed USD plan prices. All 23 backend tests passed.
+
+Browser checks for checkout cancellation, the $15 tutor checkout, both upload forms and the remaining role dashboards are still pending. The existing collection-count clarification and project contact requirements remain open.

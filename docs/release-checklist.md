@@ -15,12 +15,14 @@ Verification on November 20, 2026: the production build completed all 22 routes 
 ## Required before submission
 
 - [x] Connect and seed cloud MongoDB; provision restricted app credentials and independent BetterAuth/JWT secrets in the initial Vercel API project.
-- [ ] Configure Stripe test secret and signed webhook secret. Subscribe to checkout.session.completed and checkout.session.async_payment_succeeded at /api/payments/webhook.
-- [ ] Configure IMGBB_API_KEY; test actual image uploads on profile and tuition forms.
+- [x] Configure Stripe test secret and signed webhook secret. Subscribe to checkout.session.completed and checkout.session.async_payment_succeeded at /api/payments/webhook.
+- [x] Configure IMGBB_API_KEY and verify authenticated live upload/retrieval.
+- [ ] Verify both profile and tuition upload forms in the browser.
 - [x] Deploy the Express server and Next.js client to Vercel under MH-git-ui (Web workspace), with both GitHub repositories connected.
 - [x] Set client API_SERVER_URL to the backend origin. Set server CLIENT_URL and BETTER_AUTH_URL to the frontend HTTPS origin, without trailing slash.
 - [ ] Seed the hosted database using SEED_PASSWORD, then supply dedicated admin/tutor credentials in the final submission README.
-- [ ] Test actual Stripe success, cancellation, repeated webhook delivery and plan refresh.
+- [x] Test Stripe sandbox success, repeated webhook delivery and plan refresh.
+- [ ] Verify checkout cancellation and the tutor checkout in the browser.
 - [ ] Replace demo contact details and social destinations with project-owned details.
 - [ ] Confirm the instructor accepts four business collections plus BetterAuth storage in a separate auth database.
 - [ ] Confirm one-time Pro pricing or specify the required recurring billing interval.
@@ -35,6 +37,12 @@ Live verification through the frontend API proxy passed for public listings and 
 
 Earlier provisional deployments in Acme remain separate and are not the submission URLs. No deletion was performed during the account switch.
 
-Cloud MongoDB was successfully seeded with five demo accounts, twelve approved tuitions and three applications. The seed password is kept only in the server's ignored .env file. All 23 local backend tests pass, including demo-account sign-in and repeatable seeding. Stripe and ImgBB remain unconfigured.
+Cloud MongoDB was successfully seeded with five demo accounts, twelve approved tuitions and three applications. The seed password is kept only in the server's ignored .env file. All 23 local backend tests pass, including demo-account sign-in and repeatable seeding. Stripe and ImgBB were subsequently configured and verified as recorded below.
 
 The original requirements.md preserves the full assignment scope. Unchecked items there are historical implementation planning, not a substitute for this evidence-based release checklist. Do not claim live payments/uploads/deployment work before these checks pass.
+
+## Integration verification — November 21, 2026
+
+Stripe test credentials, signed webhooks and ImgBB are configured in Vercel. Authenticated ImgBB upload and hosted image retrieval passed. A $10 USD sandbox checkout completed, the success page confirmed payment, and the demo student dashboard showed Pro after reload. Automatic and manually resent Stripe webhooks both returned HTTP 200; repeated verification and delivery retained exactly one MongoDB payment record. No real money was charged. Adaptive Pricing is disabled to preserve the fixed USD plan prices. All 23 backend tests passed.
+
+Browser checks for checkout cancellation, the $15 tutor checkout, both upload forms and the remaining role dashboards are still pending. The existing collection-count clarification and project contact requirements remain open.
