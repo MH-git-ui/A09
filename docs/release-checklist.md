@@ -2,11 +2,12 @@
 
 ## Implemented and locally verified
 
-Verification on November 20, 2026: the production build completed all 22 routes with TypeScript checks, and all 18 backend tests passed. These local checks do not verify hosted services.
+Verification on November 20, 2026: the production build completed all 22 routes with TypeScript checks. After Vercel preparation, all 22 backend tests passed, including initialization retry/reuse and production configuration checks. These local checks do not verify hosted services.
 
 - [x] Separate repositories and more than 20 client / 12 server commits.
 - [x] Next.js production build and TypeScript check.
-- [x] Eighteen backend tests including role/ownership restrictions, duplicate application handling, atomic free limits, and payment idempotency.
+- [x] Twenty-two backend tests including role/ownership restrictions, duplicate application handling, atomic free limits, payment idempotency, and deployment initialization.
+- [x] Vercel project configuration for both repositories, a cached Express entry point, and 4 MB upload limits.
 - [x] Browser registration, subject filtering and authenticated dashboard reload.
 - [x] Twelve approved connected demo tuitions and sample applications.
 - [x] Pagination and connected seeding optional features.

@@ -20,9 +20,9 @@ export function ImageUpload({
     if (!file) return;
     if (
       !["image/jpeg", "image/png", "image/webp"].includes(file.type) ||
-      file.size > 5 * 1024 * 1024
+      file.size > 4 * 1024 * 1024
     ) {
-      toast.error("Choose a JPG, PNG, or WebP image under 5 MB.");
+      toast.error("Choose a JPG, PNG, or WebP image under 4 MB.");
       return;
     }
     setBusy(true);
@@ -63,7 +63,7 @@ export function ImageUpload({
             disabled={busy}
             onChange={(event) => void upload(event.target.files?.[0])}
           />
-          <small>JPG, PNG, WebP · up to 5 MB</small>
+          <small>JPG, PNG, WebP · up to 4 MB</small>
         </div>
       </div>
       <input type="hidden" name="bannerImage" value={value} />
