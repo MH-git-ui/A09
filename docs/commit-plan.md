@@ -1,6 +1,6 @@
 # User-owned commit checkpoints
 
-The assistant must not create commits or push. Tell the user when a coherent milestone is verified and ready to commit. The user controls Git history. Check actual Git history rather than counting this checklist as completed commits.
+The user subsequently authorized the assistant to complete the project and create meaningful commits. Commit and push completed milestones without empty count-padding commits. Check actual Git history rather than counting this checklist as completed commits.
 
 The client requires at least **20 meaningful commits** and the server at least **12**, in separate repositories. Existing documentation commits are recorded in Git but this plan includes enough substantive work without relying on those initial commits. Checkpoints can change with implementation needs; do not create empty or artificial commits.
 
@@ -52,3 +52,4 @@ The client requires at least **20 meaningful commits** and the server at least *
 - Pro pricing is $15 tutor / $10 student; billing interval is unspecified.
 - Choose at least two optional features: planned server-side pagination and realistic connected seeding.
 - Demo credentials must be dedicated testing accounts, never personal credentials.
+

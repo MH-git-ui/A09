@@ -1,69 +1,44 @@
 # MentorLagbe
 
-A tuition and mentorship platform connecting students with tutors offering online and offline classes. Built for Assignment 9, Category 001.
+A tuition and mentorship platform for Assignment 9, Category 001. The original Warm Academic interface uses Next.js App Router, React, TypeScript, Tailwind CSS, DaisyUI, Lucide icons and Sonner notifications.
 
-## Project status
+## Implemented
 
-Milestone 1: runnable Next.js client foundation with the Warm Academic design, responsive homepage introduction, subject categories, and how-it-works section. This is not the finished assignment: authentication, live tuition listings, dashboards, images, and payments remain to be implemented. Follow [the requirements checklist](docs/requirements.md).
+- BetterAuth student/tutor registration, sign-in, sign-out and persistent sessions.
+- Approved tuition search, subject/class/mode filters and server-side pagination.
+- Tuition details, student-only applications, duplicate protection and pending cancellation.
+- Tutor CRUD, two-post free limit, applicant decisions and statistics.
+- Admin moderation, role management, statistics and payment history.
+- Profile editing, ImgBB upload integration, Stripe checkout and verified payment results.
+- Loading states, error boundary, 404 page and responsive dashboard navigation.
+- Two optional features: pagination and realistic connected seed data.
 
 ## Run locally
 
-Use Node.js 22+ and pnpm 11.25.0. From this directory:
+Requires Node.js 22+ and pnpm 11.25.0. In the sibling A09-server folder run `pnpm install` then `pnpm dev:local`. This starts a local MongoDB and seeds twelve approved tuitions. In this client folder run `pnpm install` then `pnpm dev`. Open http://localhost:3000.
 
-```sh
-pnpm install
-pnpm dev
-```
+Copy .env.example to .env.local to change API_SERVER_URL. Browser requests use a same-origin /api proxy so authentication cookies survive navigation and reloads. Production checks: `pnpm typecheck` and `pnpm build`; serve the build with `pnpm start`.
 
-Open `http://localhost:3000`. Copy `.env.example` to `.env.local` when connecting the backend. The Express server is in `../A09-server` and starts separately on port 5000.
+## Demo accounts
 
-```sh
-pnpm typecheck
-pnpm build
-pnpm start
-```
+- Admin: admin@mentorlagbe.demo
+- Tutor: tutor@mentorlagbe.demo
+- Student: student@mentorlagbe.demo
 
-Development and production builds use Next.js's Webpack option because Turbopack's CSS worker failed to start in this Windows environment.
+The local runner generates a password in the server's ignored `.local/config.json` file (password field). Do not publish that file: it also contains authentication secrets. For hosted demo accounts, set SEED_PASSWORD before running the server seed command and supply that dedicated demo password to the evaluator.
 
-## Planned technology
+## Verification and remaining release work
 
-- Client: Next.js App Router, TypeScript, and a supported UI library.
-- Server: Node.js, Express, and MongoDB.
-- Authentication: BetterAuth with its MongoDB adapter, plus JWT-protected APIs and role checks.
-- Payments: Stripe Checkout and verified payment synchronization.
-- Images: ImgBB uploads for tuition banners and profile photos.
+All pages passed a production build. Eighteen server tests cover authorization, ownership, moderation, applications, free-plan concurrency and payment fulfillment. Browser checks verified registration, filtered browsing and private-route reload persistence. Further mobile and full hosted-flow verification is pending.
 
-## Key features to build
+The project is NOT ready for final submission until live hosting, cloud MongoDB, Stripe test keys/webhook and ImgBB credentials are configured and verified. The footer currently identifies its contact as a demonstration address; replace it with the project contact before submission.
 
-- Search and filter approved, active tuition listings.
-- Student applications with duplicate prevention and pending cancellation.
-- Tutor listing management, applicant decisions, and a two-post free-plan limit.
-- Admin user management, tuition moderation, and payment reporting.
-- Pro upgrades: $15 for tutors and $10 for students.
-- Responsive public pages and role-based dashboards.
+The application database has four business collections. BetterAuth account/session/verification storage uses a separate companion database. This must be clarified with the instructor if 'exactly four collections' applies across every database. Pro is implemented as a one-time $15 tutor / $10 student upgrade because the assignment does not specify a billing interval.
 
-See [the implementation checklist](docs/requirements.md) for the full delivery scope and open design questions.
+## Submission links
 
-## Repository and delivery plan
+- Client: https://github.com/MH-git-ui/A09
+- Server: https://github.com/MH-git-ui/A09-server
+- Live site: pending deployment, not yet available.
 
-The assignment requires separate client and server repository links, with at least 20 meaningful client commits and 12 meaningful server commits. This repository (`A09`) contains the client; the sibling `A09-server` contains the server and has its own Git repository. The user makes all commits. See [the milestone plan](docs/commit-plan.md); commit completed, reviewable changes rather than empty commits.
-
-## Configuration
-
-Keep real credentials in ignored environment files. The client uses `.env.local`; the server uses `.env`. Commit only placeholder `.env.example` files when configuration is implemented. Never commit database credentials, authentication secrets, or Stripe secret keys.
-
-## Submission details
-
-- Live site: pending deployment.
-- Client repository: https://github.com/MH-git-ui/A09
-- Server repository: pending creation.
-- Admin test credentials: pending dedicated demo account setup.
-- Tutor test credentials: pending dedicated demo account setup.
-- Installed packages: Next.js, React, React DOM, Lucide React, TypeScript, Tailwind CSS, the Tailwind PostCSS plugin, DaisyUI, and Node/React type definitions. Exact versions are locked in `pnpm-lock.yaml`.
-
-## Requirements source
-
-[Assignment 9 — Category 001](https://docs.google.com/document/d/103gcgFIyXzuzn1jEjb0i3J_O2cV5Vwzqu3au7aZJ_48/edit)
-
-The written assignment takes precedence over the accompanying video. The interface must use an original design.
-
+See docs/release-checklist.md for configuration and remaining acceptance checks. Commits are authorized by the user and represent separate implementation milestones; the required minimums are 20 client and 12 server commits.
