@@ -29,9 +29,9 @@ The local runner generates a password in the server's ignored `.local/config.jso
 
 ## Verification and remaining release work
 
-All pages passed a production build. Eighteen server tests cover authorization, ownership, moderation, applications, free-plan concurrency and payment fulfillment. Browser checks verified registration, filtered browsing and private-route reload persistence. Further mobile and full hosted-flow verification is pending.
+All pages passed a production build and all 23 server tests pass. On the deployed frontend, API checks verified admin, tutor and student signin, secure cookies, session-bound tokens, dashboard access, role restrictions and logout. Browser checks verified the homepage and subject filtering at a 375px viewport without horizontal document overflow. Full dashboard visual checks and live payment/upload verification remain pending.
 
-The project is NOT ready for final submission until live hosting, cloud MongoDB, Stripe test keys/webhook and ImgBB credentials are configured and verified. The footer currently identifies its contact as a demonstration address; replace it with the project contact before submission.
+Vercel hosting and cloud MongoDB are configured and verified. The project is NOT ready for final submission until Stripe test keys/webhook and ImgBB credentials are configured and verified, and the outstanding requirements below are resolved. The footer currently identifies its contact as a demonstration address; replace it with the project contact before submission.
 
 The application database has four business collections. BetterAuth account/session/verification storage uses a separate companion database. This must be clarified with the instructor if 'exactly four collections' applies across every database. Pro is implemented as a one-time $15 tutor / $10 student upgrade because the assignment does not specify a billing interval.
 
@@ -39,6 +39,7 @@ The application database has four business collections. BetterAuth account/sessi
 
 - Client: https://github.com/MH-git-ui/A09
 - Server: https://github.com/MH-git-ui/A09-server
-- Live site: pending deployment, not yet available.
+- Live site: https://mentorlagbe-mh.vercel.app
+- Live API: https://mentorlagbe-api-mh.vercel.app
 
 See docs/release-checklist.md for configuration and remaining acceptance checks. Commits are authorized by the user and represent separate implementation milestones; the required minimums are 20 client and 12 server commits.
