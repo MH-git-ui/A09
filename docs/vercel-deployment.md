@@ -4,13 +4,13 @@ Create two Vercel projects from the existing GitHub repositories. No plugin inst
 
 ## Required account configuration
 
-1. Import `MH-git-ui/A09-server` and `MH-git-ui/A09` into Vercel. Use Node.js 24 for both projects. Keep the generated project domains available for the environment configuration below. An initial deployment without these variables is not a working release.
-2. Create a MongoDB Atlas cluster and a dedicated database user. Grant that user read/write access to `mentorlagbe` and `mentorlagbe_auth` for the current authentication implementation. Configure network access for the deployment. Store the connection string only in the backend environment.
+1. Import `MH-git-ui/A09-server` and `MH-git-ui/A09` into Vercel. Use Node.js 26 for both projects. Keep the generated project domains available for the environment configuration below. An initial deployment without these variables is not a working release.
+2. Create a MongoDB Atlas cluster and a dedicated database user. Grant that user read/write access to `mentorlagbe`; all live authentication storage is in its users collection. Configure network access for the deployment. Store the connection string only in the backend environment.
 3. Add the backend environment variables from the table. Use independent, randomly generated secrets, not the values in `.env.example`. Configure Preview separately if needed; do not point preview deployments at production data by accident.
 4. Set the frontend `API_SERVER_URL` to the backend HTTPS origin, without a trailing slash, then deploy the frontend. This variable is used at build time; redeploy after changing it.
 5. Redeploy the backend with `CLIENT_URL` and `BETTER_AUTH_URL` both set to the stable frontend HTTPS origin. Requests from the browser use the frontend's `/api` proxy so authentication cookies stay on the frontend domain.
 6. Configure the Stripe test webhook on the backend `/api/payments/webhook` for `checkout.session.completed` and `checkout.session.async_payment_succeeded`. Store the endpoint's signing secret as `STRIPE_WEBHOOK_SECRET` and redeploy.
-7. Seed the hosted database from the server repository using `pnpm seed` with the hosted environment and a dedicated `SEED_PASSWORD` of at least 12 characters. The seed does not overwrite existing passwords. Do not commit credentials.
+7. Seed the hosted database from the server repository using `pnpm seed` with the hosted environment and a dedicated `SEED_PASSWORD` of at least 12 characters. The seed does not overwrite existing passwords. Do not commit infrastructure credentials. Only dedicated demo login credentials belong in the submission README.
 
 | Backend variable | Value |
 | --- | --- |
@@ -35,8 +35,8 @@ Only `API_SERVER_URL` belongs in the frontend environment. The frontend needs no
 - Verify Stripe success/cancel and repeat webhook delivery, and check that exactly one transaction is recorded.
 - Add verified URLs and dedicated demo credentials to the submission only after successful hosted checks.
 
-## Remaining schema decision
+## Database storage
 
-The current official BetterAuth adapter uses four business collections plus a companion authentication database. This does not satisfy a global exactly-four-collections interpretation. Deployment configuration does not resolve that requirement; instructor acceptance or a tested alternative authentication-storage implementation is still required.
+The live application uses exactly four physical MongoDB collections: users, tuitions, applications and payments. The official BetterAuth MongoDB adapter stores its account/session/verification logical models as tagged records inside users. Mandatory model filters keep those records out of application user queries and counts; authentication joins are disabled. An automated test verifies isolation and the physical collection count. The previous companion database is retained only as an offline migration backup; the application no longer reads or writes it.
 
 References: [Express on Vercel](https://vercel.com/docs/frameworks/backend/express), [function limits](https://vercel.com/docs/functions/limitations).
