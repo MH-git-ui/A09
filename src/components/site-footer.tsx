@@ -21,8 +21,8 @@ export function SiteFooter() {
         </div>
         <div>
           <h3>Get in touch</h3>
-          <p>hello@mentorlagbe.example</p>
-          <p>+880 1XXX-XXXXXX</p>
+          <p>contact@mentorlagbe.example</p>
+          <p>+880 1000-000000</p>
           <p><small>Demo contact details — not monitored.</small></p>
           <p>
             Dhaka, Bangladesh
