@@ -23,6 +23,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const { user, signOut } = useAuth();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, []);
   const role = user?.role;
   const links =
     role === "student"
@@ -49,11 +57,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           ] as const);
   return (
     <Protected>
-      <div className="dashboard">
+      <div className={`dashboard ${collapsed ? "dashboard-collapsed" : ""}`}>
         <button
           className="dashboard-menu icon-button"
           aria-label="Toggle dashboard sidebar"
           aria-expanded={open}
+          aria-controls="dashboard-sidebar"
           onClick={() => setOpen(!open)}
         >
           {open ? <X /> : <Menu />}
@@ -65,7 +74,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             onClick={() => setOpen(false)}
           />
         )}
-        <aside className={`dashboard-sidebar ${open ? "sidebar-open" : ""}`}>
+        <aside id="dashboard-sidebar" className={`dashboard-sidebar ${open ? "sidebar-open" : ""}`}>
           <Brand />
           <p className="sidebar-label">YOUR LEARNING SPACE</p>
           <nav aria-label="Dashboard navigation">
@@ -103,6 +112,15 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </aside>
         <div className="dashboard-body">
           <header className="dashboard-topbar">
+            <button
+              className="desktop-sidebar-toggle icon-button"
+              aria-label={collapsed ? "Expand dashboard sidebar" : "Collapse dashboard sidebar"}
+              aria-expanded={!collapsed}
+              aria-controls="dashboard-sidebar"
+              onClick={() => setCollapsed(!collapsed)}
+            >
+              <Menu />
+            </button>
             <span>Small steps. Meaningful progress.</span>
             {user && (
               <div className="dashboard-user">

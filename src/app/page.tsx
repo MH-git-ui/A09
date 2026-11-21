@@ -224,8 +224,8 @@ export default function Home() {
                 </span>
                 <h3>Make the connection</h3>
                 <p>
-                  Share your learning goals and preferred schedule in your
-                  application.
+                  Tutors post a batch from their dashboard for admin approval.
+                  Students apply with their goals and preferred schedule.
                 </p>
               </article>
               <article>

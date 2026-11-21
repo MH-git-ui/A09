@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { CalendarDays, MapPin, Monitor, BookOpen } from "lucide-react";
+import { CalendarDays, MapPin, Monitor, BookOpen, BadgeCheck } from "lucide-react";
 import { useData } from "@/hooks/use-data";
 import { Tuition, money } from "@/lib/types";
 import { ErrorState, Loading, Badge } from "./feedback";
@@ -69,7 +69,11 @@ export function TuitionDetails({ id }: { id: string }) {
               <Avatar name={t.tutorName} image={t.tutor?.image} />
               <div>
                 <h3>{t.tutorName}</h3>
-                {t.tutor?.plan === "pro" && <Badge value="Pro tutor" />}
+                {t.tutor?.plan === "pro" && (
+                  <span className="verified-tutor-badge" title="Verified Pro membership; not a qualification check">
+                    <BadgeCheck size={16} aria-hidden="true" /> Verified Pro tutor
+                  </span>
+                )}
               </div>
             </div>
             <p>

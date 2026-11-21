@@ -871,6 +871,7 @@ input[type="radio"] {
   padding: 30px 22px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 .dashboard-sidebar .brand {
   font-size: 1.35rem;
@@ -930,6 +931,7 @@ input[type="radio"] {
   gap: 25px;
 }
 .dashboard-topbar > span {
+  flex: 1;
   color: var(--muted);
   font-size: 0.875rem;
 }
@@ -941,6 +943,7 @@ input[type="radio"] {
 .dashboard-user strong {
   display: block;
   font-size: 0.85rem;
+  overflow-wrap: anywhere;
 }
 .dashboard-user .status-badge {
   font-size: 0.65rem;
@@ -957,6 +960,18 @@ input[type="radio"] {
 }
 .dashboard-menu {
   display: none;
+}
+.desktop-sidebar-toggle { flex-shrink: 0; }
+.verified-tutor-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 100px;
+  background: #eaf1e3;
+  color: var(--green);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 .stats-grid {
   display: grid;
@@ -1144,9 +1159,6 @@ td .btn {
   }
   .site-nav {
     gap: 15px;
-  }
-  .site-links .status-badge {
-    display: none;
   }
   .dashboard {
     grid-template-columns: 220px minmax(0, 1fr);
@@ -1377,6 +1389,7 @@ td .btn {
     top: 20px;
     z-index: 70;
   }
+  .desktop-sidebar-toggle { display: none; }
   .sidebar-open .brand {
     margin-top: 50px;
   }
@@ -1443,6 +1456,10 @@ td .btn {
   .panel > p {
     overflow-wrap: anywhere;
   }
+}
+@media (min-width: 651px) {
+  .dashboard.dashboard-collapsed { grid-template-columns: minmax(0, 1fr); }
+  .dashboard-collapsed .dashboard-sidebar { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .skeleton-card {

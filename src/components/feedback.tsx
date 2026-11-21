@@ -1,3 +1,6 @@
+"use client";
+import { useEffect } from "react";
+import { toast } from "sonner";
 import { AlertCircle, BookOpen } from "lucide-react";
 export function Loading({ count = 3 }: { count?: number }) {
   return (
@@ -35,6 +38,9 @@ export function ErrorState({
   message: string;
   retry?: () => void;
 }) {
+  useEffect(() => {
+    toast.error(message, { id: `error-${message}` });
+  }, [message]);
   return (
     <div className="error-state" role="alert">
       <AlertCircle />

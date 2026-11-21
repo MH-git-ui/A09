@@ -104,7 +104,7 @@ export function Pricing({ compact = false }: { compact?: boolean }) {
             {(tutor
               ? [
                   "Unlimited tuition posts",
-                  "Pro tutor badge on your profile",
+                  "Verified Pro tutor badge on your profile",
                   "All Free features included",
                 ]
               : [

@@ -7,14 +7,13 @@ import { Brand } from "./brand";
 import { useAuth } from "./auth-provider";
 import { Badge } from "./feedback";
 export function Avatar({ name, image }: { name: string; image?: string }) {
-  return image ? (
+  const [failedImage, setFailedImage] = useState<string>();
+  return image && image !== failedImage ? (
     <img
       className="avatar-image"
       src={image}
       alt={`${name}'s profile`}
-      onError={(e) => {
-        e.currentTarget.style.display = "none";
-      }}
+      onError={() => setFailedImage(image)}
     />
   ) : (
     <span className="avatar-initial" aria-label={name}>
