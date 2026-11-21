@@ -21,10 +21,9 @@ export function SiteFooter() {
         </div>
         <div>
           <h3>Get in touch</h3>
-          <a href="mailto:mh4846111@gmail.com">
-            mh4846111@gmail.com
-          </a>
-          <a href="tel:+8801894829536">01894829536</a>
+          <p>hello@mentorlagbe.example</p>
+          <p>+880 1XXX-XXXXXX</p>
+          <p><small>Demo contact details — not monitored.</small></p>
           <p>
             Dhaka, Bangladesh
           </p>
@@ -45,7 +44,12 @@ export function SiteFooter() {
                 <path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3L12 14.6 5.5 22H2.4l8.1-9.3L.8 2h6.5l4.5 6.7L18.9 2Zm-1.1 18h1.7L6.4 3.9H4.6L17.8 20Z" />
               </svg>
             </a>
-            <a href="https://www.facebook.com/mahmudul.hassan.185703/" target="_blank" rel="noreferrer">
+            <a
+              href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmentorlagbe-mh.vercel.app"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Share MentorLagbe on Facebook"
+            >
               Facebook
             </a>
           </div>
