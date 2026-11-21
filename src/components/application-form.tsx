@@ -22,7 +22,7 @@ export function ApplicationForm({ tuitionId }: { tuitionId: string }) {
   if (user.role !== "student")
     return (
       <p className="notice">
-        Only students can apply for tuition. You’re signed in as a {user.role}.
+        Only students can apply for tuition. Your current role is {user.role}.
       </p>
     );
   if (sent)

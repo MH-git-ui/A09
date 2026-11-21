@@ -2,6 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { SlidersHorizontal, Search } from "lucide-react";
+import { toast } from "sonner";
 import { subjects, levels, TuitionPage } from "@/lib/types";
 import { useData } from "@/hooks/use-data";
 import { TuitionCard } from "./tuition-card";
@@ -22,6 +23,7 @@ export function Browse() {
       if (String(value).trim()) next.set(key, String(value).trim());
     router.push(`/tuitions?${next}`);
     setFiltersOpen(false);
+    toast.success("Search filters applied.");
   }
   function page(number: number) {
     const next = new URLSearchParams(params);
